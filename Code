@@ -1,0 +1,52 @@
+import math
+ind=[]
+
+file=open('input_s1_08.txt')
+way=[]
+a=file.readline().split()
+result=0
+apples_number=int(a[1])
+branches_number=int(a[0])
+length_matrix=[[math.inf for x in range(0,branches_number+1)] for y in range (0,branches_number+1)]
+length_list=[0 for x in range(branches_number+1)]
+z=1
+for i in range(0,branches_number): 
+    t=file.readline().split()
+    length_matrix[int(t[0])][z]=int(t[1])
+    length_matrix[z][int(t[0])]=int(t[1])
+    length_matrix[i][i]=0
+    length_matrix[i+1][i+1]=0
+    z+=1
+for i in range(0,apples_number):
+    t=file.readline().split()
+    length_list[int(t[0])]=int(t[1])
+t=file.readline().split()
+start=int(t[0])
+Z=int(t[1])
+for i in range(branches_number+1):
+    if length_list[i]<Z:
+        length_list[i]=0
+D=length_matrix
+Dd=[[0 for x in range (0,branches_number+1)] for y in range(0,branches_number+1)]
+for c in range(branches_number+1):
+    for i in range(branches_number+1):
+        for j in range(branches_number+1):
+            Dd[i][j]=min(D[i][c]+D[c][j],D[i][j])
+    D=Dd
+for i in range(branches_number+1):
+    t=file.readline().split()
+for i in range(len(length_list)):
+    if length_list[i]!=0:
+        ind.append(i)
+while ind!=[0]*len(ind):
+    for i in ind:
+        if i!=0:
+            way.append(D[start][i])
+        else:
+            way.append(math.inf) 
+    result+=min(way)
+    start=ind[way.index(min(way))]
+    ind[way.index(min(way))]=0
+    way=[]
+print(str(result))
+    
